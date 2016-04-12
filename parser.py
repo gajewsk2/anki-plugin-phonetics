@@ -2,6 +2,7 @@
 import os
 import codecs
 import json
+import re
 import sys, locale
 # from aqt.utils import showInfo
 # sys.stdout = codecs.getwriter(locale.getpreferredencoding())(sys.stdout)
@@ -51,14 +52,28 @@ def inReading(idx, character, expression, data):
 #
 #     row = i.split("\t")
 
+def getChars(i):
+    char_delim = '→'
+    chars = i[i.index(char_delim) + 1:]
+    chars = list(re.sub('[, \n]', '', chars))
+    return chars
 
-# def highlight():
-#     highlight_index = (chars).index(c)
-#     total_index = delim_index + highlight_index
-#     highlighted = raw[:total_index] + '<b>' + c + '</b>' + raw[total_index + 1:]
+def highlight(c, raw):
+    delim_index = raw.index(u'→')
+    chars = (raw)[delim_index:]
+    highlight_index = (chars).index(c)
+    total_index = delim_index + highlight_index
+    highlighted = raw[:total_index] + '<b>' + c + '</b>' + raw[total_index + 1:]
+    return highlighted
+
+def formatLines(phonetics):
+    phonetics_string = u'\n'
+    return u'\n'.join(phonetics)
+    # return phonetics_string.decode('utf-8')
 
 def getPhonetic(expression, data):
     expression = expression.decode('utf-8', 'ignore')
+    phoenetics = []
     for idx, c in enumerate(expression):
         # print '燥'.decode('utf8')
         if c in data:
@@ -67,15 +82,17 @@ def getPhonetic(expression, data):
                 print('2here2', data[c])
                 raw = data[c]['raw']
                 # showInfo(raw)
-                print(raw)
+                phoenetics.append(highlight(c, raw))
+
                 # print('here',raw.decode('utf-8'))
+    return phoenetics
 
 
 def getHighlightedPhonetics(expression):
     input_file = 'data.json'
     data = getReadingData(input_file)
     # print(data[u'燥'])
-    getPhonetic(expression, data)
+    return formatLines(getPhonetic(expression, data))
 
 
 def getReadingData(input_file):
