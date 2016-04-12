@@ -1,9 +1,8 @@
 #
-# Copyright: Robert Polz <robert.polz.cz@gmail.com>
-# Batch-mode optimized by Vempele
+# Copyright: Micah Gajewski <micahbgaj@gmail.com>
 # License: GNU GPL, version 3 or later; http://www.gnu.org/copyleft/gpl.html
 #
-# Automatic RTK keyword generation.
+# Automatic Phonetics Generation.
 #
 
 from PyQt4.QtCore import *
@@ -73,5 +72,4 @@ def onRegenerate(browser):
 # Init
 ##########################################################################
 
-# addHook('editFocusLost', onFocusLost)
 addHook("browser.setupMenus", setupMenu)
